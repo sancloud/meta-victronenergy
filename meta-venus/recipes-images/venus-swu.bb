@@ -12,3 +12,12 @@ IMAGE_DEPENDS = "bpp3-rootfs"
 # SWUPDATE_IMAGES: list of images that will be part of the compound image
 # the list can have any binaries - images must be in the DEPLOY directory
 SWUPDATE_IMAGES = "bpp3-rootfs-${MACHINE}.ubifs uImage u-boot.img MLO splash.bgra"
+
+do_version() {
+    sed -e "s/version = .*;/version = \"${BUILDNAME} ${DISTRO_VERSION}\";/" \
+        -i ${WORKDIR}/sw-description
+}
+
+addtask do_version after do_unpack before do_swuimage
+
+do_version[depends] += "bpp3-rootfs:do_rootfs"
