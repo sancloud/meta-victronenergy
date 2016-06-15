@@ -6,9 +6,8 @@ IMAGE_INSTALL = " \
 	busybox \
 	busybox-mdev \
 	curl \
-	initscripts \
+	kernel-modules \
 	mtd-utils-ubifs \
-	sysvinit \
 	swupdate \
 	tinylogin \
 	u-boot-env-tools \
@@ -40,7 +39,7 @@ remove_locale_data_files() {
 }
 
 add_program_instructions() {
-	cp ${WORKDIR}/swupdate ${IMAGE_ROOTFS}${sysconfdir}/init.d
+	install ${WORKDIR}/swupdate ${IMAGE_ROOTFS}/sbin/init
 }
 
 # remove unneeded pkg informations
