@@ -23,7 +23,7 @@ do_install () {
 	cp ${DEPLOY_DIR_IMAGE}/MLO ${SDCARD}
 	cp ${DEPLOY_DIR_IMAGE}/u-boot.img ${SDCARD}
 	cp ${DEPLOY_DIR_IMAGE}/${INITRD_IMAGE} ${SDCARD}/initramfs
-	cp ${DEPLOY_DIR_IMAGE}/fatload-initramfs.scr ${SDCARD}/boot.scr
+	cp ${DEPLOY_DIR_IMAGE}/upgrade.scr ${SDCARD}/boot.scr
 	cp ${DEPLOY_DIR_IMAGE}/venus-swu-${MACHINE}.swu ${SDCARD}/venus.swu
 
 	zip -rj ${DEPLOY_DIR_IMAGE}/${IMAGE_NAME}.sdcard.zip ${SDCARD}
