@@ -13,6 +13,7 @@ RREPLACES_${PN}_bpp3 = "color-control"
 RCONFLICTS_${PN}_bpp3 = "color-control"
 
 do_install () {
+	: ${DATETIME} # HACK: force rebuild
 	echo -e "${DISTRO_VERSION}\n${DISTRO_NAME}\n${BUILDNAME}" > version
 	install -d ${D}${vedir}
 	install -m 644 version ${D}${vedir}
