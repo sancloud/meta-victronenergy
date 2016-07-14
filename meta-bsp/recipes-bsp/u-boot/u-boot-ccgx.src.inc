@@ -9,5 +9,9 @@ S = "${WORKDIR}/u-boot-2013.01.01-ccgx-v4"
 FILESEXTRAPATHS_prepend := "${THISDIR}/u-boot-ccgx:"
 
 SRC_URI += " \
+	file://0001-bpp3-really-force-autoboot-when-no-key-is-pressed.patch \
+	file://0002-bpp3-update-default-environment-for-swupdate.patch \
+	file://0003-bpp3-show-splash-screen-in-u-boot.patch \
+	file://0004-u-boot-ccgx-disable-falcon-mode.patch \
 	file://0005-add-libubootenv.a-needed-by-swupdate.patch \
 "

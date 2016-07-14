@@ -1,0 +1,28 @@
+From 170773ed91ee8107a7bcb5e170a3543ba1f8263b Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Fri, 17 Jun 2016 15:46:28 +0100
+Subject: [PATCH] bpp3: really force autoboot when no key is pressed
+
+With bootdelay set to zero, a character in the serial port buffer
+will disable autoboot.  The special value -2 bypasses this check
+and forces autoboot.
+---
+ include/configs/bpp3.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/configs/bpp3.h b/include/configs/bpp3.h
+index 92a874e24a4d..771e783cc766 100644
+--- a/include/configs/bpp3.h
++++ b/include/configs/bpp3.h
+@@ -58,7 +58,7 @@
+ 		"if gpio input 26; then " 		\
+ 			"setenv bootdelay -1; " 	\
+ 		"else "					\
+-			"setenv bootdelay 0; " 		\
++			"setenv bootdelay -2; "		\
+ 		"fi"
+ 
+ #define CONFIG_OMAP3_GPIO_2
+-- 
+2.9.0
+

@@ -1,0 +1,39 @@
+From c2dc5c239b2db982076121339f76bd912d8b7b35 Mon Sep 17 00:00:00 2001
+From: Mans Rullgard <mans@mansr.com>
+Date: Sun, 19 Jun 2016 20:50:37 +0100
+Subject: [PATCH] bpp3: show splash screen in u-boot
+
+---
+ board/victron/bpp3/bpp3.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
+
+diff --git a/board/victron/bpp3/bpp3.c b/board/victron/bpp3/bpp3.c
+index c76c14b5710d..364dee992abd 100644
+--- a/board/victron/bpp3/bpp3.c
++++ b/board/victron/bpp3/bpp3.c
+@@ -174,7 +174,6 @@ int board_video_init(void)
+ 	ulong *p = (ulong *) gd->fb_base;
+ 	u32 n;
+ 	char *s;
+-	ulong color;
+ 
+ 	panel.frame_buffer = (void *) gd->fb_base;
+ 	omap3_dss_panel_config(&panel);
+@@ -183,12 +182,8 @@ int board_video_init(void)
+ 
+ 	s = getenv("stdout");
+ 	if (s && strcmp(s, "vga") == 0)
+-		color = 0x000000;
+-	else
+-		color = 0x0000FF;
+-
+-	for (n = 0; n < SIZE_X * SIZE_Y; n++)
+-		*p++ = color;
++		for (n = 0; n < SIZE_X * SIZE_Y; n++)
++			*p++ = 0;
+ 
+ 	enable_lcd(1);
+ 
+-- 
+2.9.0
+
