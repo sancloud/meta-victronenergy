@@ -8,10 +8,16 @@ dirs755 += " /data"
 # mount point for the scratch partition
 dirs755 += "/scratch"
 
-# Replace home dir with symlink to persistent volume
 do_install_append() {
+	# Replace home dir with symlink to persistent volume
 	if [ -d ${D}/home/root ]; then
 		rmdir ${D}/home/root
 		ln -s ${permanentdir}/home/root ${D}/home/root
+	fi
+
+	# Replace /media with symlink to volatile location
+	if [ -d ${D}/media ]; then
+		rmdir ${D}/media
+		ln -s ${localstatedir}/volatile/media ${D}/media
 	fi
 }
