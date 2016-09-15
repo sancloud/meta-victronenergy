@@ -4,7 +4,7 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384
 DESCRIPTION = "Daemon which only announces the device its presence over upnp"
 PR = "r5"
 
-DEPENDS += "gupnp"
+DEPENDS += "gupnp libsoup-2.4"
 RDEPENDS_${PN} = "glib-2.0 gupnp"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
@@ -35,8 +35,10 @@ do_install() {
 
 pkg_postinst_${PN}() {
 	if [ "x$D" = "x" ]; then
-		hwaddr=`ifconfig -a | grep "eth0.*HWaddr" | awk '{print $(NF)}'`
+		hwaddr=$(ifconfig -a | grep "eth0.*HWaddr" | awk '{print $(NF)}')
 		cat ${sysconfdir}/simple-upnpd.skeleton.xml | sed "s/:::MAC:::/${hwaddr}/g" > ${sysconfdir}/simple-upnpd.xml
+		hwaddr_small=$(echo ${hwaddr} | sed "s/://g" |  tr '[:upper:]' '[:lower:]' )
+		cat ${sysconfdir}/simple-upnpd.skeleton.xml | sed "s/:::mac_small:::/${hwaddr_small}/g" > ${sysconfdir}/simple-upnpd.xml
 	else
 		exit 1
 	fi
