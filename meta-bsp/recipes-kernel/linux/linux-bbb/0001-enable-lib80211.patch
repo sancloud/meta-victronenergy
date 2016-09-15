@@ -1,0 +1,25 @@
+From 75f2d89ee30ba4fbfe37c8586fcd8906a369ce67 Mon Sep 17 00:00:00 2001
+From: mpvader <mvader@victronenergy.com>
+Date: Fri, 16 Sep 2016 01:01:20 +0200
+Subject: [PATCH] enable lib80211
+
+---
+ arch/arm/configs/bbb_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/configs/bbb_defconfig b/arch/arm/configs/bbb_defconfig
+index ac94d4a..34c4e1b 100644
+--- a/arch/arm/configs/bbb_defconfig
++++ b/arch/arm/configs/bbb_defconfig
+@@ -779,7 +779,7 @@ CONFIG_CFG80211_DEFAULT_PS=y
+ # CONFIG_CFG80211_DEBUGFS is not set
+ # CONFIG_CFG80211_INTERNAL_REGDB is not set
+ CONFIG_CFG80211_WEXT=y
+-# CONFIG_LIB80211 is not set
++CONFIG_LIB80211=y
+ CONFIG_MAC80211=m
+ CONFIG_MAC80211_HAS_RC=y
+ CONFIG_MAC80211_RC_MINSTREL=y
+-- 
+2.0.2
+
