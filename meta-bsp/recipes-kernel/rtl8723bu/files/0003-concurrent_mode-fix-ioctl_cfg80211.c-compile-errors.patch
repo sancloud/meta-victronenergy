@@ -1,0 +1,51 @@
+From 355afbe0822c1a96f8699fcaab0bd68c049fb7c5 Mon Sep 17 00:00:00 2001
+From: mpvader <mvader@victronenergy.com>
+Date: Fri, 16 Sep 2016 09:35:06 +0200
+Subject: [PATCH] concurrent_mode: fix ioctl_cfg80211.c compile errors
+
+Error was:
+ioctl_cfg80211.c: In function 'cfg80211_rtw_change_iface':
+ioctl_cfg80211.c:1715:6: error: implicit declaration of function 'netdev_if2_open' [-Werror=implicit-function-declaration]
+   if(netdev_if2_open(ndev) != 0) {
+      ^
+
+Fix that by adding the extern declaration. I found that in os_dep/linux/ioctl_cfg80211.c.
+Seeing that version of the same file, I first wondered if it should not use
+that file instead. But using that results in a long list of errors and
+warnings. Therefore aboneded that and just copied the extern declaration
+over instead.
+
+
+Note that there are still two warnings, which I have not fixed,
+and also did not not further investigated:
+
+ioctl_cfg80211.c:5855:22: warning: initialization from incompatible pointer type [-Wincompatible-pointer-types]
+  .add_virtual_intf = cfg80211_rtw_add_virtual_intf,
+                      ^
+ioctl_cfg80211.c:5855:22: note: (near initialization for 'rtw_cfg80211_ops.add_virtual_intf')
+ioctl_cfg80211.c:5871:18: warning: initialization from incompatible pointer type [-Wincompatible-pointer-types]
+  .dump_station = cfg80211_rtw_dump_station,
+                  ^
+
+---
+ os_dep/ioctl_cfg80211.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/os_dep/ioctl_cfg80211.c b/os_dep/ioctl_cfg80211.c
+index 0333f54..1213399 100644
+--- a/os_dep/ioctl_cfg80211.c
++++ b/os_dep/ioctl_cfg80211.c
+@@ -1684,6 +1684,10 @@ exit:
+ 	return ret;
+ }
+ 
++#ifdef CONFIG_CONCURRENT_MODE
++extern int netdev_if2_open(struct net_device *pnetdev);
++#endif
++
+ static int cfg80211_rtw_change_iface(struct wiphy *wiphy,
+ 				     struct net_device *ndev,
+ 				     enum nl80211_iftype type, u32 *flags,
+-- 
+2.0.2
+

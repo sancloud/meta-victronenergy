@@ -1,0 +1,25 @@
+From feae5ea71093754084ad7c12822215d6d15755cf Mon Sep 17 00:00:00 2001
+From: mpvader <mvader@victronenergy.com>
+Date: Fri, 16 Sep 2016 01:29:13 +0200
+Subject: [PATCH] autoconf.h: enable CONFIG_CONCURRENT_MODE
+
+---
+ include/autoconf.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/autoconf.h b/include/autoconf.h
+index d5556af..3275ea8 100644
+--- a/include/autoconf.h
++++ b/include/autoconf.h
+@@ -95,7 +95,7 @@
+ #endif
+ 
+ 
+-//#define CONFIG_CONCURRENT_MODE 1
++#define CONFIG_CONCURRENT_MODE 1
+ #ifdef CONFIG_CONCURRENT_MODE
+ 	//#define CONFIG_HWPORT_SWAP				//Port0->Sec , Port1 -> Pri
+ 	#define CONFIG_RUNTIME_PORT_SWITCH
+-- 
+2.0.2
+
