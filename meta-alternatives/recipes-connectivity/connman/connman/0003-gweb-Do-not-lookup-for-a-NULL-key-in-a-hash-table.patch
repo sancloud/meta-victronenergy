@@ -1,9 +1,17 @@
+From 4c44fb2889a6ba9ccf52d894c16fcc90e5194187 Mon Sep 17 00:00:00 2001
+From: Tomasz Bursztyka <tomasz.bursztyka@linux.intel.com>
+Date: Thu, 15 May 2014 12:19:12 +0100
+Subject: [PATCH 3/5] gweb: Do not lookup for a NULL key in a hash table
+
+At this position, no key might have been provided yet.
+
+Reported by Marcel Mulder <mmulder@victronenerty.com>
 ---
  gweb/gweb.c | 3 +++
  1 file changed, 3 insertions(+)
 
 diff --git a/gweb/gweb.c b/gweb/gweb.c
-index f6828cf..7771190 100644
+index 6ce5028ad57c..a6e4a033bf4d 100644
 --- a/gweb/gweb.c
 +++ b/gweb/gweb.c
 @@ -806,6 +806,9 @@ static void handle_multi_line(struct web_session *session)
@@ -17,5 +25,5 @@ index f6828cf..7771190 100644
  					session->result.last_key);
  	if (value) {
 -- 
-1.8.3.2
- 
+2.10.0
+

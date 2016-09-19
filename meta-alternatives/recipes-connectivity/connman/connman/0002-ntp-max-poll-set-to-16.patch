@@ -1,17 +1,17 @@
-From 594d7006a9b49f1f9fa0d10dc637631aec31c994 Mon Sep 17 00:00:00 2001
+From 9d0cb7b9d1660f8ce48a36d6bbe395131f006b60 Mon Sep 17 00:00:00 2001
 From: Marcel Mulder <mmulder@victronenergy.com>
 Date: Tue, 18 Mar 2014 15:52:22 +0100
-Subject: [PATCH] ntp max poll set to 16
+Subject: [PATCH 2/5] ntp max poll set to 16
 
 ---
  src/ntp.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/src/ntp.c b/src/ntp.c
-index 6701f9f..5e6e77c 100644
+index 01f5dc605a22..770787b4a1a2 100644
 --- a/src/ntp.c
 +++ b/src/ntp.c
-@@ -164,8 +164,8 @@ static void send_packet(int fd, const char *server, uint32_t timeout)
+@@ -167,8 +167,8 @@ static void send_packet(int fd, struct sockaddr *server, uint32_t timeout)
  	memset(&msg, 0, sizeof(msg));
  	msg.flags = NTP_FLAGS_ENCODE(NTP_FLAG_LI_NOTINSYNC, NTP_FLAG_VN_VER4,
  	    NTP_FLAG_MD_CLIENT);
@@ -21,7 +21,7 @@ index 6701f9f..5e6e77c 100644
 +	msg.poll = 16;	// max
  	msg.precision = NTP_PRECISION_S;
  
- 	memset(&addr, 0, sizeof(addr));
+ 	if (server->sa_family == AF_INET) {
 -- 
-1.8.3.2
+2.10.0
 
