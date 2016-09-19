@@ -14,6 +14,8 @@
 # -force   force downloading and installing the new image, even if its
 #          version is older or same as already installed version.
 # -offline search for updates on removable storage devices
+# -stdin   install an update read from standard input
+#          no version check is performed
 #
 # Behaviour when called without any arguments is same as -update
 #
@@ -117,6 +119,7 @@ for arg; do
         -delay)  delay=y     ;;
         -force)  force=y     ;;
         -offline)offline=y   ;;
+        -stdin)  stdin=y     ;;
         *)       echo "Invalid option $arg"
                  exit 1
                  ;;
@@ -180,38 +183,40 @@ if [ "$offline" = y ]; then
     fi
 fi
 
-echo "Retrieving latest version (feed=$feed)..."
-swu_status 1
+if [ "$stdin" != y ]; then
+    echo "Retrieving latest version (feed=$feed)..."
+    swu_status 1
 
-cur_version=$(get_version)
-swu_version=$(get_swu_version "$SWU")
+    cur_version=$(get_version)
+    swu_version=$(get_swu_version "$SWU")
 
-if [ -z "$swu_version" ]; then
-    echo "Unable to retrieve latest software version, exit."
-    swu_status -1
-    exit 1
-fi
+    if [ -z "$swu_version" ]; then
+        echo "Unable to retrieve latest software version, exit."
+        swu_status -1
+        exit 1
+    fi
 
-cur_build=${cur_version%% *}
-swu_build=${swu_version%% *}
+    cur_build=${cur_version%% *}
+    swu_build=${swu_version%% *}
 
-if [ "$offline" != y ]; then
-    # change SWU url into the full name
-    SWU=${URL_BASE}/venus-swu-${machine}-${swu_build}.swu
-fi
+    if [ "$offline" != y ]; then
+        # change SWU url into the full name
+        SWU=${URL_BASE}/venus-swu-${machine}-${swu_build}.swu
+    fi
 
-echo "installed: $cur_version"
-echo "available: $swu_version"
+    echo "installed: $cur_version"
+    echo "available: $swu_version"
 
-if [ "$force" != y -a "${swu_build}" -le "${cur_build}" ]; then
-    echo "No newer version available, exit."
-    swu_status 0
-    exit
-fi
+    if [ "$force" != y -a "${swu_build}" -le "${cur_build}" ]; then
+        echo "No newer version available, exit."
+        swu_status 0
+        exit
+    fi
 
-if [ "$update" != 1 ]; then
-    swu_status 0 "$swu_version"
-    exit
+    if [ "$update" != 1 ]; then
+        swu_status 0 "$swu_version"
+        exit
+    fi
 fi
 
 altroot=$(get_altrootfs)
@@ -240,7 +245,16 @@ else
     swupdate_flags="-t 30 -r 3 -d"
 fi
 
-if do_swupdate $swupdate_flags "$SWU" -e "stable,copy$altroot"; then
+if [ "$stdin" = y ]; then
+    # swupdate doesn't allow piping the image, so start its web server and
+    # push the image that way instead
+    do_swupdate -w - -e "stable,copy$altroot" &
+    sleep 1
+    curl -s -o /dev/null -F 'fileselect[]=@-' \
+         http://localhost:8080/handle_post_request
+    swu_status 3
+    reboot
+elif do_swupdate $swupdate_flags "$SWU" -e "stable,copy$altroot"; then
     echo "do_swupdate completed OK. Rebooting"
     swu_status 3 "$swu_version"
     reboot

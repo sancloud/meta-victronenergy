@@ -34,7 +34,12 @@ CONFIG_EXTRA_LDLIBS=""
 # CONFIG_WERROR is not set
 # CONFIG_NOCLEANUP is not set
 CONFIG_DOWNLOAD=y
-# CONFIG_WEBSERVER is not set
+CONFIG_WEBSERVER=y
+
+#
+# Webserver Features
+#
+CONFIG_MONGOOSE=y
 
 #
 # Archival Features
